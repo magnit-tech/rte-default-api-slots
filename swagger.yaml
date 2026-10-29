@@ -733,8 +733,7 @@ components:
             - delivery
             - pickup
           type: string
-          description: "При delivery - доставляет вендор, 
-          при pickup доставляет или курьер Магнит, или покупатель (смотри поле taker)"
+          description: "При delivery - доставляет вендор, при pickup доставляет или курьер Магнит, или покупатель (смотри поле taker)"
         delivery:
           $ref: '#/components/schemas/Delivery'
         pickup:
