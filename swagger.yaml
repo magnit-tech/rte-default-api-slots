@@ -1,0 +1,1521 @@
+openapi: 3.0.1
+info:
+  title: api-vitrina
+  version: v1
+servers:
+  - url: https://black.hole
+paths:
+  /api/v1/Blocks/list:
+    get:
+      description: "[В разработке]Получение списка заблокированных ресторанов"
+      tags:
+        - Blocks
+      parameters:
+        - name: storeId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetStoreBlocksResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStoreBlocksResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetStoreBlocksResponse'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/Blocks/block:
+    post:
+      description: "[В разработке] Временная блокировка ресторана"
+      tags:
+        - Blocks
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/BlockStoreRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockStoreRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/BlockStoreRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/BlockStoreRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/BlockStoreResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockStoreResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BlockStoreResponse'
+  /api/v1/Blocks/unblock:
+    post:
+      description: "[В разработке] Разблокировка ресторана"
+      tags:
+        - Blocks
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UnblockStoreRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnblockStoreRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UnblockStoreRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UnblockStoreRequest'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/Menus/{restaurantId}:
+    get:
+      tags:
+        - Menus
+      summary: "Получение меню."
+      parameters:
+        - name: restaurantId
+          in: path
+          description: "Идентификатор ресторана"
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+      responses:
+        '200':
+          description: "Меню"
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Menu'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Menu'
+        5XX:
+          description: Server error
+  /api/v1/Orders/{restaurantId}/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: ''
+      parameters:
+        - name: restaurantId
+          in: path
+          description: "Идентификатор ресторана в системе партнера"
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+        - name: orderId
+          in: path
+          description: "Идентификатор заказа в системе партнера"
+          example: "o111222333"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/OrderWithRejectingReason'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithRejectingReason'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithRejectingReason'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    put:
+      tags:
+        - Orders
+      summary: ''
+      parameters:
+        - name: restaurantId
+          in: path
+          description: "Идентификатор ресторана в системе партнера"
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+        - name: orderId
+          in: path
+          description: "Идентификатор заказа в системе партнера"
+          example: "o111222333"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/Orders/{restaurantId}:
+    post:
+      tags:
+        - Orders
+      summary: "Метод создания заказа в ресторане"
+      parameters:
+        - name: restaurantId
+          in: path
+          description: "Уникальный идентификатор ресторана"
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+            example:
+              originalOrderId: 86c48784-b7af-4b66-8c05-348005d38a1a
+              preOrder: false
+              createdAt: '2024-07-04T15:41:36.7495617Z'
+              customer:
+                name: Customer Name
+                phone: '+71111111111'
+                email: test@test.test
+              payment:
+                type: online
+              expeditionType: pickup
+              pickup:
+                expectedTimeFrom: '2024-07-04T16:00:00.0000000Z'
+                expectedTimeTo: '2024-07-04T18:00:00.0000000Z'
+                taker: courier
+              products:
+                - id: '9000903'
+                  name: Баскет Дуэт с острыми стрипсами
+                  price: 409
+                  quantity: 1
+                  ingredients: []
+              promotions: []
+              comment: Customer comment
+              price:
+                total: 409
+                deliveryFee: 149
+                discount: 0
+              personsQuantity: 1
+              callCenter:
+                phone: CallCenter Phone
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+            example:
+              originalOrderId: 86c48784-b7af-4b66-8c05-348005d38a1a
+              preOrder: false
+              createdAt: '2024-07-04T15:41:36.7495617Z'
+              customer:
+                name: Customer Name
+                phone: '+71111111111'
+                email: test@test.test
+              payment:
+                type: online
+              expeditionType: pickup
+              pickup:
+                expectedTime: '2024-07-04T16:11:36.7498005Z'
+                taker: courier
+              products:
+                - id: '9000903'
+                  name: Баскет Дуэт с острыми стрипсами
+                  price: 409
+                  quantity: 1
+                  ingredients: []
+              promotions: []
+              comment: Customer comment
+              price:
+                total: 409
+                deliveryFee: 149
+                discount: 0
+              personsQuantity: 1
+              callCenter:
+                phone: CallCenter Phone
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+            example:
+              originalOrderId: 86c48784-b7af-4b66-8c05-348005d38a1a
+              preOrder: false
+              createdAt: '2024-07-04T15:41:36.7495617Z'
+              customer:
+                name: Customer Name
+                phone: '+71111111111'
+                email: test@test.test
+              payment:
+                type: online
+              expeditionType: pickup
+              pickup:
+                expectedTime: '2024-07-04T16:11:36.7498005Z'
+                taker: courier
+              products:
+                - id: '9000903'
+                  name: Баскет Дуэт с острыми стрипсами
+                  price: 409
+                  quantity: 1
+                  ingredients: []
+              promotions: []
+              comment: Customer comment
+              price:
+                total: 409
+                deliveryFee: 149
+                discount: 0
+              personsQuantity: 1
+              callCenter:
+                phone: CallCenter Phone
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+            example:
+              originalOrderId: 86c48784-b7af-4b66-8c05-348005d38a1a
+              preOrder: false
+              createdAt: '2024-07-04T15:41:36.7495617Z'
+              customer:
+                name: Customer Name
+                id: "66cf31c4-7ff7-41c8-982a-911271098c14"
+                phone: '+71111111111'
+                email: test@test.test
+              payment:
+                type: online
+              expeditionType: pickup
+              pickup:
+                expectedTime: '2024-07-04T16:11:36.7498005Z'
+                taker: courier
+              products:
+                - id: '9000903'
+                  name: Баскет Дуэт с острыми стрипсами
+                  price: 409
+                  quantity: 1
+                  ingredients: []
+              promotions: []
+              comment: Customer comment
+              price:
+                total: 409
+                deliveryFee: 149
+                discount: 0
+              personsQuantity: 1
+              callCenter:
+                phone: CallCenter Phone
+      responses:
+        '201':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithId'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RejectingReason'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RejectingReason'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RejectingReason'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/StopLists/{restaurantId}:
+    get:
+      tags:
+        - StopLists
+      summary: "Стоплисты для блюд. Даже если блюдо находится в стоплисте, его необходимо передавать в основном меню"
+      parameters:
+        - name: restaurantId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Response'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /api/v1/Slots/{restaurantId}:
+    get:
+      tags:
+        - Slots
+      summary: "Получение слотов"
+      parameters:
+        - name: restaurantId
+          in: path
+          description: "Идентификатор ресторана"
+          required: true
+          schema:
+            type: string
+          example: '74013271'
+      responses:
+        '200':
+          description: "Слоты"
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Slots'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slots'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Slots'
+        5XX:
+          description: Server error
+components:
+  schemas:
+    Address:
+      required:
+        - city
+        - coordinates
+      type: object
+      properties:
+        subway:
+          maxLength: 64
+          minLength: 0
+          type: string
+        region:
+          maxLength: 255
+          minLength: 0
+          type: string
+        city:
+          $ref: '#/components/schemas/City'
+        street:
+          $ref: '#/components/schemas/Street'
+        houseNumber:
+          type: string
+          nullable: true
+        flatNumber:
+          type: string
+          nullable: true
+        entrance:
+          type: string
+          nullable: true
+        intercom:
+          type: string
+          nullable: true
+        floor:
+          type: string
+          nullable: true
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+      additionalProperties: false
+    BlockItem:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        storeId:
+          type: string
+          nullable: true
+        blockId:
+          type: string
+          nullable: true
+        startsAt:
+          type: string
+          nullable: true
+          example: '2024-07-04T15:41:36.7495617Z'
+        endsAt:
+          type: string
+          nullable: true
+          example: '2024-07-04T15:41:36.7495617Z'
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BlockStoreRequest:
+      required:
+        - blockId
+        - comment
+        - endsAt
+        - startsAt
+        - storeId
+      type: object
+      properties:
+        storeId:
+          type: string
+        blockId:
+          type: string
+        startsAt:
+          type: string
+          example: '2024-07-04T15:41:36.7495617Z'
+        endsAt:
+          type: string
+          example: '2024-07-04T15:41:36.7495617Z'
+        comment:
+          type: string
+      additionalProperties: false
+    BlockStoreResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        storeId:
+          type: string
+          nullable: true
+        blockId:
+          type: string
+          nullable: true
+        startsAt:
+          type: string
+          nullable: true
+          example: '2024-07-04T15:41:36.7495617Z'
+        endsAt:
+          type: string
+          nullable: true
+          example: '2024-07-04T15:41:36.7495617Z'
+        reason:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CallCenter:
+      description: "Данные коллцентра для связи при проблемах с заказом"
+      required:
+        - phone
+      type: object
+      properties:
+        phone:
+          description: "Контактный телефон Коллцентра"
+          example: "88005553535"
+          maxLength: 16
+          minLength: 0
+          type: string
+      additionalProperties: false
+    Category:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          description: "Уникальный идентификатор категории"
+          example: "a10"
+          maxLength: 128
+          minLength: 0
+          type: string
+        parentId:
+          description: "Родительская категория для вложенных категорий (сейчас не используется, не заполнять)"
+          maxLength: 128
+          minLength: 0
+          type: string
+        name:
+          description: "Наименование категории"
+          example: "Пицца"
+          maxLength: 256
+          minLength: 0
+          type: string
+      additionalProperties: false
+    CategoryProduct:
+      description: "Сортировка блюд в рамках категории"
+      required:
+        - categoryId
+        - order
+        - productId
+      type: object
+      properties:
+        productId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор блюда"
+          example: "27973"
+        categoryId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор категории"
+          example: "a10"
+        order:
+          type: integer
+          format: int32
+          description: "Позиция блюда внутри категории. Чем меньше значение - тем выше блюдо находится в списке внутри категории. Минимальное значение 0"
+      additionalProperties: false
+    City:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          minLength: 0
+          type: string
+        code:
+          maxLength: 128
+          minLength: 0
+          type: string
+      additionalProperties: false
+    Coordinates:
+      required:
+        - latitude
+        - longitude
+      type: object
+      properties:
+        latitude:
+          maxLength: 11
+          minLength: 0
+          type: string
+        longitude:
+          maxLength: 11
+          minLength: 0
+          type: string
+      additionalProperties: false
+      description: "Географические координаты в формате Яндекс"
+    CreateOrder:
+      required:
+        - callCenter
+        - createdAt
+        - customer
+        - expeditionType
+        - originalOrderId
+        - payment
+        - personsQuantity
+        - preOrder
+        - price
+        - products
+      type: object
+      properties:
+        originalOrderId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор заказа созданный на стороне агрегатора"
+        preOrder:
+          type: boolean
+        createdAt:
+          type: string
+          example: '2024-07-04T15:41:36.7495617Z'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        expeditionType:
+          enum:
+            - delivery
+            - pickup
+          type: string
+          description: "При delivery - доставляет вендор, 
+          при pickup доставляет или курьер Магнит, или покупатель (смотри поле taker)"
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+        pickup:
+          $ref: '#/components/schemas/Pickup'
+        products:
+          type: array
+          description: "Список блюд в заказе"
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+        promotions:
+          type: array
+          description: "Список промоакций примененных к заказу (пока не используется)"
+          items:
+            $ref: '#/components/schemas/OrderPromotion'
+        comment:
+          type: string
+          description: "Комментарий клиента к заказу"
+          example: "Сделайте красиво, пожалуйста"
+        price:
+          $ref: '#/components/schemas/Price'
+        personsQuantity:
+          type: integer
+          format: int32
+          description: "Количество персон"
+          example: 5
+        callCenter:
+          $ref: '#/components/schemas/CallCenter'
+      additionalProperties: false
+    Customer:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          description: "Идентификатор клиента"
+          example: "66cf31c4-7ff7-41c8-982a-911271098c14"
+          type: string
+        name:
+          description: "Имя клиента"
+          example: "Игорь"
+          maxLength: 64
+          minLength: 0
+          type: string
+        phone:
+          description: "Контактный телефон курьера. Сейчас передается телефон коллцентра, позже будет подменный номер клиента"
+          example: "Игорь"
+          maxLength: 16
+          minLength: 0
+          type: string
+        extensionNumber:
+          maxLength: 16
+          minLength: 0
+          type: string
+          nullable: true
+          description: "Добавочный номер (пока не используется)"
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: "Email клиента"
+      additionalProperties: false
+    Delivery:
+      description: "Адрес доставки"
+      required:
+        - address
+        - expectedTimeFrom
+        - expectedTimeTo
+      type: object
+      properties:
+        expectedTimeFrom:
+          type: string
+        expectedTimeTo:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+      additionalProperties: false
+    GetStoreBlocksResponse:
+      type: object
+      properties:
+        blocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockItem'
+          nullable: true
+      additionalProperties: false
+    GroupIngredient:
+      required:
+        - id
+        - isExcisable
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          example: "gi13"
+          description: "Уникальный идентификатор группы ингредиентов"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: "Название группы ингредиентов"
+          example: "Топпинги"
+        price:
+          type: number
+          format: double
+          example: 25
+        vat:
+          type: integer
+          description: "Ставка НДС (0, 5, 7, 10, 20 (deprecated), 22). Если не будет передана, то унаследуется от блюда к которому привязана группа ингредиентов"
+          format: int32
+          example: 10
+        isExcisable:
+          type: boolean
+          description: "Признак подакцизного ингредиента"
+        productId:
+          type: string
+          description: "Идентификатор продукта, к которому привязана группа ингредиентов"
+          example: "27973"
+        minAmount:
+          type: integer
+          format: int32
+          description: "Минимальное количество выбранного ингрдиента"
+          example: 1
+        maxAmount:
+          type: integer
+          format: int32
+          description: "Максимальное количество выбранного ингредиента"
+          example: 10
+        defaultAmount:
+          type: integer
+          format: int32
+          description: "Количество выбранного ингредиента по умолчанию"
+          example: 2
+      additionalProperties: false
+    Ingredient:
+      required:
+        - id
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Уникальный идентификатор ингредиента"
+          example: "i25"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: "Название ингредиента"
+          example: "Сметана 50г"
+        price:
+          type: number
+          format: double
+          description: "Цена за единицу ингредиента"
+          example: 20.5
+        vat:
+          type: integer
+          description: "Ставка НДС (0, 5, 7, 10, 20 (deprecated), 22). Если не будет передана, то унаследуется от блюда к которому привязан ингредиент"
+          format: int32
+          example: 10
+        minAmount:
+          type: integer
+          format: int32
+          description: "Минимальное количество выбранного ингредиента"
+          example: 1
+        maxAmount:
+          type: integer
+          format: int32
+          description: "Максимальное количество выбранного ингредиента"
+          example: 10
+        defaultAmount:
+          type: integer
+          format: int32
+          description: "Количество выбранного ингредиента по умолчанию"
+          example: 2
+      additionalProperties: false
+    IngredientsGroup:
+      required:
+        - ingredients
+        - name
+      type: object
+      description: "Указывается группа ингредиентов, в рамках которой обязательно надо выбрать 1 вариант"
+      properties:
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: "Название группы ингредиентов"
+          example: "Топпинги"
+        minAmount:
+          type: integer
+          format: int32
+          description: "Минимальное количество выбранных ингредиентов в рамках группы"
+          example: 1
+        maxAmount:
+          type: integer
+          format: int32
+          description: "Максимальное количество выбранных ингредиентов в рамках группы"
+          example: 10
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupIngredient'
+      additionalProperties: false
+    Menu:
+      required:
+        - lastUpdatedAt
+        - menuItems
+      type: object
+      properties:
+        lastUpdatedAt:
+          description: "Дата/время последнего изменения меню. Меню не будет обновляться если дата в ответе сервера не отличается от даты последнего обновления меню"
+          type: string
+          example: '2024-07-04T15:41:36.7495617Z'
+        menuItems:
+          $ref: '#/components/schemas/MenuItems'
+      additionalProperties: false
+    MenuItems:
+      required:
+        - categories
+        - categoryProducts
+        - products
+      type: object
+      properties:
+        categories:
+          type: array
+          description: "Категории блюд. Важно, тут должны передаваться только те категории в которых есть хотя бы одно блюдо"
+          items:
+            $ref: '#/components/schemas/Category'
+        products:
+          type: array
+          description: "Список блюд. Важно, должны передаваться даже те блюда которые недоступны для заказа(находятся в стоплисте)"
+          items:
+            $ref: '#/components/schemas/Product'
+        categoryProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryProduct'
+      additionalProperties: false
+    OrderIngredient:
+      required:
+        - id
+        - name
+        - price
+        - quantity
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор ингредиента"
+          example: "i25"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: "Название ингредиента"
+          example: "Сметана 50г"
+        price:
+          type: number
+          format: double
+          description: "Цена за единицу ингредиента"
+          example: 20.5
+        quantity:
+          description: "Количество выбранного ингредиента"
+          example: 3
+          type: integer
+          format: int32
+        groupName:
+          description: "Название группы ингредиентов"
+          example: "Топпинги"
+          maxLength: 256
+          minLength: 0
+          type: string
+      additionalProperties: false
+    OrderProduct:
+      required:
+        - id
+        - name
+        - price
+        - pricePerPiece
+        - quantity
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор блюда"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+        price:
+          type: number
+          description: "Цена за блюдо со скидкой включая ингредиенты. (quantity * pricePerPiece)"
+          format: double
+        pricePerPiece:
+          type: number
+          description: "Цена за блюдо со скидкой включая ингредиенты. За единицу товара"
+          format: double
+        quantity:
+          type: integer
+          format: int32
+          description: "Количество заказанных блюд"
+          example: 3
+        promotionId:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: "Идентификатор промоакции (пока не используется)"
+        ingredients:
+          type: array
+          description: "Выбранные ингредиенты для блюд заказа"
+          items:
+            $ref: '#/components/schemas/OrderIngredient'
+      additionalProperties: false
+    OrderPromotion:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          maxLength: 40
+          minLength: 0
+          type: string
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+      additionalProperties: false
+    OrderWithId:
+      required:
+        - id
+        - status
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: Идентификатор заказа
+        status:
+          enum:
+            - created
+            - accepted
+            - restaurant_cancelled
+            - customer_cancelled
+            - picked_up
+            - delivered
+            - on_the_way
+            - courier_cancelled
+            - cooking
+            - ready
+            - courier_is_close_to_restaurant
+            - courier_at_restaurant
+          type: string
+          description: "created - новый заказ, accepted - заказ принят, restaurant_cancelled - отменен рестораном, customer_cancelled - отменен клиентом, picked_up - произведен самовывоз, delivered - заказ доставлен, on_the_way - заказ готов и находится в пути, \r\n            courier_cancelled -отмена заказа курьером, cooking - заказ готовится, ready - заказ  готов, courier_is_close_to_restaurant - курьер на подходе к ресторану, courier_at_restaurant - курьер в ресторане"
+        shortCode:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: Короткий код заказа
+        pinCode:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: Пин-код заказа
+        longCode:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: Полный номер заказа
+      additionalProperties: false
+    OrderWithRejectingReason:
+      required:
+        - id
+        - status
+      type: object
+      properties:
+        rejectingReason:
+          $ref: '#/components/schemas/RejectingReason'
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор заказа"
+        status:
+          enum:
+            - created
+            - accepted
+            - restaurant_cancelled
+            - customer_cancelled
+            - picked_up
+            - delivered
+            - on_the_way
+            - courier_cancelled
+            - cooking
+            - ready
+            - courier_is_close_to_restaurant
+            - courier_at_restaurant
+          type: string
+          description: "created - новый заказ, accepted - заказ принят, restaurant_cancelled - отменен рестораном, customer_cancelled - отменен клиентом, picked_up - произведен самовывоз, delivered - заказ доставлен, on_the_way - заказ готов и находится в пути, \r\n            courier_cancelled -отмена заказа курьером, cooking - заказ готовится, ready - заказ  готов, courier_is_close_to_restaurant - курьер на подходе к ресторану, courier_at_restaurant - курьер в ресторане"
+        shortCode:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: "Короткий код заказа"
+        pinCode:
+          maxLength: 16
+          minLength: 0
+          type: string
+          description: "Пин-код заказа"
+        longCode:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Полный номер заказа"
+      additionalProperties: false
+    Payment:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          enum:
+            - online
+          type: string
+          description: "online - онлайн оплата"
+        requiredMoneyChange:
+          maxLength: 8
+          minLength: 0
+          type: string
+          description: "Сумма с которой необходимо дать сдачу (не используется)"
+      additionalProperties: false
+    Pickup:
+      required:
+        - expectedTimeFrom
+        - expectedTimeTo
+        - taker
+      type: object
+      properties:
+        expectedTimeFrom:
+          type: string
+        expectedTimeTo:
+          type: string
+        taker:
+          enum:
+            - courier
+            - customer
+          type: string
+          description: "Кто заберет заказ из ресторана, courier - курьер, customer - клиент"
+          example: "customer"
+      additionalProperties: false
+    Price:
+      required:
+        - deliveryFee
+        - discount
+        - total
+      type: object
+      properties:
+        total:
+          type: number
+          description: "Сумма заказа после применения всех скидок и прочих расчетов"
+          format: double
+          example: 2000.56
+        deliveryFee:
+          type: number
+          format: double
+          description: "Сумма сбора за доставку"
+          example: 50.0
+        discount:
+          type: number
+          description: "Сумма скидок для всего заказа"
+          example: 100.0
+          format: double
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    Product:
+      required:
+        - categoryId
+        - id
+        - isExcisable
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          example: "27973"
+          description: "Уникальный идентификатор блюда"
+        categoryId:
+          maxLength: 128
+          minLength: 0
+          type: string
+          example: "a10"
+          description: "Идентификатор категории ссылающийся на id категории в структуре Category"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: "Название блюда"
+          example: "Оладьи домашние"
+        description:
+          maxLength: 4096
+          minLength: 0
+          type: string
+          description: "Полное описание блюда"
+          example: "Оладьи домашние приготовленные по традиционному рецепту"
+        price:
+          type: number
+          description: "Цена в рублях"
+          format: double
+          example: 280
+        vat:
+          type: integer
+          description: "Ставка НДС (0, 5, 7, 10, 20 (deprecated), 22)"
+          format: int32
+          example: 10
+        imageUrl:
+          maxLength: 4096
+          minLength: 0
+          type: string
+          description: "Путь к изображению блюда, валидный URL доступный из интернета"
+        byWeight:
+          type: boolean
+          description: "В случае если товар весовой, сервис считает что в поле price передаётся цена за 100 г"
+          example: true
+        weight:
+          maxLength: 32
+          minLength: 0
+          type: string
+          description: "Вес в граммах вида 100/50/30"
+          example: "100"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+          description: "Необязательные ингредиенты, клиент может выбрать их в любом количестве"
+        ingredientsGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientsGroup'
+          description: "Клиент должен выбрать один ингредиент из каждой группы. В рамках одного блюда не должно быть двух групп с одинаковыми именами"
+        energyValue:
+          type: number
+          description: "Энергетическая ценность в Ккал"
+          format: double
+          example: 335.6
+        fats:
+          type: number
+          description: "Жиры, гр"
+          format: double
+          example: 25.8
+        carbohydrates:
+          type: number
+          format: double
+          description: "Углеводы, гр"
+          example: 10.8
+        proteins:
+          type: number
+          format: double
+          description: "Белки, гр"
+          example: 5.8
+        volume:
+          maxLength: 32
+          minLength: 0
+          type: string
+          description: "Объём жидкости для напитков, значение должно быть в мл"
+          example: "1500"
+        isExcisable:
+          type: boolean
+          description: "Признак подакцизного товара"
+          example: false
+        isFSARequired:
+          type: boolean
+          description: "Признак необходимости сертификата соответствия товара"
+          example: false
+        FSADocs:
+          type: string
+          description: "Ссылка на сертификат соответствия"
+          example: "https://pub.fsa.gov.ru/rss/certificate/view/3720172/baseInfo"
+      additionalProperties: false
+    RejectingReason:
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          maxLength: 64
+          minLength: 0
+          type: string
+          description: Код отмены, строка
+        message:
+          maxLength: 4096
+          minLength: 0
+          type: string
+          description: Информация об отмене заказа
+          nullable: true
+        unavailableProductIds:
+          type: array
+          items:
+            type: string
+          description: ИД недоступных продуктов
+        unavailableIngredientIds:
+          type: array
+          items:
+            type: string
+          description: ИД недоступных модификаторов
+      additionalProperties: false
+      description: Причина отмены заказа
+    Response:
+      type: object
+      properties:
+        stopList:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopListItem'
+      additionalProperties: false
+    StopListItem:
+      required:
+        - id
+        - type
+      type: object
+      properties:
+        type:
+          description: "Тип. product - основное блюдо, ingredient - ингредиент для блюда, category - категория"
+          enum:
+            - product
+            - ingredient
+            - category
+          type: string
+        id:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: "Идентификатор сущности для блокировки"
+        name:
+          maxLength: 256
+          minLength: 0
+          type: string
+      additionalProperties: false
+    Street:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          minLength: 0
+          type: string
+        code:
+          maxLength: 128
+          minLength: 0
+          type: string
+      additionalProperties: false
+    UnblockStoreRequest:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+      additionalProperties: false
+    UpdateOrder:
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          enum:
+            - created
+            - accepted
+            - restaurant_cancelled
+            - customer_cancelled
+            - picked_up
+            - delivered
+            - on_the_way
+            - courier_cancelled
+            - cooking
+            - ready
+            - courier_is_close_to_restaurant
+            - courier_at_restaurant
+          type: string
+          description: "accepted - заказ принят, restaurant_cancelled - отменен рестораном, customer_cancelled - отменен клиентом, picked_up - произведен самовывоз, delivered - заказ доставлен, on_the_way - заказ готов и находится в пути, \r\n           courier_cancelled - отмена заказа курьером, courier_is_close_to_restaurant - курьер на подходе к ресторану, courier_at_restaurant - курьер в ресторане, ready - заказ готов, cooking - заказ готовится"
+        rejectingReason:
+          $ref: '#/components/schemas/RejectingReason'
+      additionalProperties: false
+    Slots:
+      required:
+        - deliverySlots
+        - takeawaySlots
+      type: object
+      description: "Расписание слотов ресторана. В рамках каждого дня может быть несколько слотов с разными интервалами (например 9:00-12:00, 12:00-13:30 и 13:30-18:00)"
+      properties:
+        deliverySlots:
+          description: "Слоты на доставку"
+          type: array
+          items:
+            $ref: "#/components/schemas/SlotItem"
+        takeawaySlots:
+          description: "Слоты на самовывоз"
+          type: array
+          items:
+            $ref: "#/components/schemas/SlotItem"
+      additionalProperties: false
+
+    SlotItem:
+      type: object
+      required:
+        - id
+        - date
+        - from
+        - to
+        - is_active
+      properties:
+        id:
+          description: Внешний идентификатор
+          type: string
+        date:
+          description: Дата действия слота
+          type: string
+          format: date
+          example: "2026-02-10"
+        from:
+          $ref: "#/components/schemas/SlotTime"
+        to:
+          $ref: "#/components/schemas/SlotTime"
+        is_active:
+          description: "Активность слота"
+          type: boolean
+      additionalProperties: false
+    SlotTime:
+      type: object
+      required:
+        - hours
+        - minutes
+      properties:
+        hours:
+          description: Время начала и окончания слота в UTC
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'Нужен постоянный токен авторизации. Authorization needed to access the endpoints. Authorization: Bearer {token}'
+      name: Authorization
+      in: header
+security:
+  - Bearer: []
